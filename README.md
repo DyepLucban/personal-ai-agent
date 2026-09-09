@@ -16,10 +16,16 @@ set the downloaded model to `RUNNER_MODEL` with the `RUNNER_MODEL_BASE_URL` of `
 ## Run the app
 Run `docker compose up --build`
 
-then make a request, `http:localhost:8000/chat` with json body of:
+- ### Run via endpoint
+    then make a request, `http:localhost:8000/chat` with json body of:
 
-```
-{
-    "query": "You query here"
-}
-```
+    ```
+    {
+        "query": "You query here"
+    }
+    ```
+
+- ### Run/Trigger via Telegram
+    - Create a bot first using [BotFather](https://core.telegram.org/api)
+    - Get the bot token and set this to `TELEGRAM_BOT_TOKEN`
+    - Set the `TELEGRAM_API_URL` to `https://api.telegram.org/bot`

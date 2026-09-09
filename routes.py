@@ -1,5 +1,5 @@
 from fastapi import Request, APIRouter
-from controllers import chat_controller
+from controllers import chat_controller, telegram_controller
 
 router = APIRouter()
 
@@ -10,3 +10,7 @@ async def health():
 @router.post("/chat")
 async def chat(request: Request):
     return await chat_controller.chat(request)
+
+@router.post("/webhook/telegram")
+async def handle_webhook(request: Request):
+    return await telegram_controller.handle_webhook(request)
