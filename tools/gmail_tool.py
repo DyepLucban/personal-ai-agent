@@ -102,8 +102,7 @@ def draft_email(subject: str, body: str, recipient: str) -> dict:
         return {"status": "error", "message": f"Gmail API error: {error}"}
 
     logger.info("Created draft %s to %s", draft["id"], recipient)
-    # Only the id — the full Gmail draft body is large and goes straight into the
-    # model's context via json.dumps in agent/chat.py.
+
     return {
         "status": "success",
         "draft_id": draft["id"],
