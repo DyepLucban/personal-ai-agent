@@ -1,4 +1,4 @@
-# Personal AI Agent
+# Personal AI Agent 🤖
 
 Personal AI Agent created from python, FastAPI, Langchain and Docker Model Runner
 
@@ -7,11 +7,12 @@ Download docker desktop, then go to Models > Docker Hub and install the LLM that
 
 set the downloaded model to `RUNNER_MODEL` with the `RUNNER_MODEL_BASE_URL` of `http://host.docker.internal:12434/v1`
 
-## Current implemented tools
+## Current implemented tools 🛠️
 - Weather API 🤮
 - Random Joke API 🤮
 - Github (create issue just for now) 🔥
 - Gmail API (draft message) 🔥
+- Telegram Bot (as entry point instead of calling api route) 💬
 
 ## Run the app
 Run `docker compose up --build`
