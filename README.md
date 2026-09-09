@@ -115,8 +115,8 @@ curl -X POST http://localhost:8000/chat \
 └── docker-compose.yml
 ```
 
-## 🗺️ Roadmap ideas
+## 🗺️ Future plans / additions
 
-- Wire up the `pgvector` Postgres instance for persistent memory / retrieval-augmented generation
-- Populate `config/prompts.py` with configurable, reusable system prompts
-- Add more tools (calendar, notes, search, etc.)
+- 🧠 **RAG implementation** — wire up the `pgvector` Postgres instance ot `Qdrant` for persistent memory and retrieval-augmented generation
+- 📝 Populate `config/prompts.py` with configurable, reusable system prompts
+- 🔧 Add more tools (calendar, notes, search, etc.)
