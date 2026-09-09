@@ -11,6 +11,7 @@ set the downloaded model to `RUNNER_MODEL` with the `RUNNER_MODEL_BASE_URL` of `
 - Weather API 🤮
 - Random Joke API 🤮
 - Github (create issue just for now) 🔥
+- Gmail API (draft message) 🔥
 
 ## Run the app
 Run `docker compose up --build`

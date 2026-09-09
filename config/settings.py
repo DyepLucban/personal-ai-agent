@@ -22,3 +22,10 @@ RUNNER_MODEL = os.getenv("RUNNER_MODEL")
 
 # --- GitHub Credentials ---
 GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+
+# --- Google API Credentials
+GOOGLE_TOKEN_URI = os.getenv("GOOGLE_TOKEN_URI")
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+GOOGLE_SCOPE = os.getenv("GOOGLE_SCOPE")
+GOOGLE_REFRESH_TOKEN = os.getenv("GOOGLE_REFRESH_TOKEN")

@@ -29,3 +29,8 @@ tenacity            # retry logic for flaky API calls
 
 # --- Github library
 pyGithub
+
+# --- Google API
+google-auth
+google-auth-oauthlib
+google-api-python-client
