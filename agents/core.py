@@ -1,6 +1,8 @@
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
+from langchain import chat_models
 from config.settings import RUNNER_MODEL, RUNNER_MODEL_BASE_URL
+from config.prompts import GENERAL_PURPOSE
 
 def run_core(query: str, tools = []):
     max_iteration = 5
@@ -8,7 +10,7 @@ def run_core(query: str, tools = []):
 
     # Build message
     message = [
-        SystemMessage(content="You are a chabot assistant with capability of using weather_tool for weather related query."),
+        SystemMessage(content=GENERAL_PURPOSE),
         HumanMessage(content=query)
     ]
 
@@ -17,7 +19,7 @@ def run_core(query: str, tools = []):
         model=RUNNER_MODEL,
         base_url=RUNNER_MODEL_BASE_URL,
         api_key="not-needed",
-        temperature=2.0
+        temperature=0.5
     )
 
     # Attach tools
