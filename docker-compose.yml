@@ -4,13 +4,18 @@ services:
     container_name: personal-ai-agent-db
     restart: always
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: db_user
+      POSTGRES_PASSWORD: password
       POSTGRES_DB: ai_agent
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U db_user -d ai_agent"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   app:
     build: .
@@ -22,9 +27,23 @@ services:
       - .:/app
     env_file:
       - .env
+    environment:
+      POSTGRES_HOST: postgres
+    models:
+      llm:
+        endpoint_var: RUNNER_MODEL_BASE_URL
+        model_var: RUNNER_MODEL
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      - postgres
-    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+      postgres:
+        condition: service_healthy
+    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+
+models:
+  llm:
+    model: ai/ornith-1.5:9b-q5_K_M
+    context_size: 16384
 
 volumes:
   pgdata:
