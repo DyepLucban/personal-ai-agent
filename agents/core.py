@@ -3,8 +3,10 @@ from langchain_core.messages import HumanMessage, SystemMessage, ToolMessage
 from langchain import chat_models
 from config.settings import RUNNER_MODEL, RUNNER_MODEL_BASE_URL
 from config.prompts import GENERAL_PURPOSE
+from langsmith import traceable
 
-def run_core(query: str, tools = []):
+@traceable
+async def run_core(query: str, tools = []):
     max_iteration = 5
     tool_map = {t.name: t for t in tools}
 
@@ -27,7 +29,7 @@ def run_core(query: str, tools = []):
 
     for i in range(max_iteration):
         # Invoke chat
-        response = llm_with_tools.invoke(message)
+        response = await llm_with_tools.ainvoke(message)
 
         # return response
         print(f"[ITERATION {i+1}]")
@@ -49,7 +51,7 @@ def run_core(query: str, tools = []):
                 continue
 
             try:
-                result = tool_fn.invoke(tc["args"])
+                result = await tool_fn.ainvoke(tc["args"])
                 message.append(ToolMessage(content=str(result), tool_call_id=tc["id"]))
             except Exception as e:
                 print(f"Error: {e}")
