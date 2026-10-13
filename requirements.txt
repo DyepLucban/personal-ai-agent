@@ -41,7 +41,7 @@ python-multipart==0.0.32
 pypdf==6.18.0
 
 # --- Database (Postgres + pgvector) ---
-sqlalchemy>=2.0
+sqlalchemy[asyncio]>=2.0
 alembic
 pgvector
 psycopg[binary]

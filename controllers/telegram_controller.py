@@ -42,21 +42,23 @@ async def handle_webhook(request: Request, background_tasks: BackgroundTasks) ->
         print(f"Error: {e}")
         return {"status": "error", "code": 500, "message": e}
 
-def _process_message(chat_id, query) -> None:
+async def _process_message(chat_id, query) -> None:
     try:
-        res = run_agent(query)
-        bot_reply(chat_id, res["message"])
+        res = await run_agent(query)
+        print(f"AGENT RESULT: {res}")
+        await bot_reply(chat_id, res["message"])
     except Exception as e:
         print(f"Error processing message: {e}")
 
-def bot_reply(chat_id, text) -> dict:
+async def bot_reply(chat_id, text) -> dict:
     try:
-        httpx.post(f"{TELEGRAM_API_URL}{TELEGRAM_BOT_TOKEN}/sendMessage", json={
-            "chat_id": chat_id,
-            "text": text
-        })
+        async with httpx.AsyncClient(timeout=30) as client:
+            r = await client.post(f"{TELEGRAM_API_URL}{TELEGRAM_BOT_TOKEN}/sendMessage", json={
+                "chat_id": chat_id,
+                "text": text
+            })
 
-        return {"status":200, "message": "ok"}
+        return {"status":r.status_code, "message": "ok"}
     except OSError as e:
         print(f"Error: {e}")
         return {"status": "error", "code": 500, "message": e}

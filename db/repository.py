@@ -5,21 +5,41 @@ from sqlalchemy.orm import Session
 
 from db.models import Chunk, Document
 
-
-def _search_stmt(query_vector: list[float], top_k: int) -> Select:
+async def search_chunks_async(
+    session: AsyncSession, 
+    query_vector: list[float], 
+    top_k: int = 5, 
+    min_similarity: float = 0.5
+):
     distance = Chunk.embedding.cosine_distance(query_vector)
-    return select(Chunk, (1 - distance).label("similarity")).order_by(distance).limit(top_k)
 
+    cols = [
+        Chunk.id,
+        Chunk.document_id,
+        Chunk.content,
+        Chunk.meta,
+        (1 - distance).label("similarity"),
+    ]
 
-async def search_chunks_async(session: AsyncSession, query_vector: list[float], top_k: int = 5):
-    result = await session.execute(_search_stmt(query_vector, top_k))
-    return result.all()
+    top = (await session.execute(
+        select(*cols).order_by(distance).limit(top_k)
+    )).mappings().all()
 
+    top = [r for r in top if r["similarity"] >= min_similarity]
+    if not top:
+        return []
 
-def search_chunks_sync(session: Session, query_vector: list[float], top_k: int = 5):
-    result = session.execute(_search_stmt(query_vector, top_k))
-    return result.all()
+    sections = list({r["meta"].get("section") for r in top} - {None})
+    if not sections:
+        return top
 
+    expanded = (await session.execute(
+        select(*cols)
+        .where(Chunk.meta["section"].as_string().in_(sections))
+        .order_by(distance)
+    )).mappings().all()
+
+    return expanded
 
 async def get_document_by_hash(session: AsyncSession, content_sha256: str) -> Document | None:
     result = await session.execute(select(Document).where(Document.content_sha256 == content_sha256))

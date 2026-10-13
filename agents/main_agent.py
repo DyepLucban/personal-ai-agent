@@ -5,9 +5,9 @@ from tools.github_tool import create_issue
 from tools.gmail_tool import draft_email
 from tools.db_search_tool import database_search
 
-def run_agent(query):
+async def run_agent(query):
     # Instantiate OpenAI
-    response = run_core(query, [
+    response = await run_core(query, [
         get_weather,
         generate_joke,
         create_issue,
